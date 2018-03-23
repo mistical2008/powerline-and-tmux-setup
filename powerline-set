@@ -1,11 +1,36 @@
 #!/bin/bash
-mkdir -p ~/.config/powerline/config_files;
-mkdir -p  ~/.config/powerline/config_files/themes/shell;
-mkdir -p  ~/.config/powerline/config_files/themes/tmux;
+if [[ -d ~/.config/powerline ]]; then
+  echo "Powerline directori exist. Removing...";
+  rm -rf ~/.config/powerline;
+fi
+ERR=0;
+echo "Creating directories for powerline configuration"
+mkdir -p ~/.config/powerline;
+mkdir -p  ~/.config/powerline/themes/shell;
+mkdir -p  ~/.config/powerline/themes/tmux;
 
-cp config.json ~/.config/powerline/config_files/config.json;
-cp main.json ~/.config/powerline/config_files/themes/shell/__main__.json;
-cp my_leftonly.json ~/.config/powerline/config_files/themes/shell/my_leftonly.json;
-cp tmux_def.json ~/.config/powerline/config_files/themes/tmux/default.json;
+ERR_COUNT=$ERR+$?
+if [[ $ERR_COUNT==0 ]]; then
+  echo "Directory structure created"
+else
+  echo "Directory structure wasn't created. Some troubles";
+  exit 1;
+fi
 
+ERR=0;
+echo "Copying custom settings to '~/.config/powerline/config_files'"
+cp -r /usr/lib/python3.6/site-packages/powerline/config_files ~/.config/powerline
+cp config.json ~/.config/powerline/config.json;
+cp main.json ~/.config/powerline/themes/shell/__main__.json;
+cp my_leftonly.json ~/.config/powerline/themes/shell/my_leftonly.json;
+cp tmux_def.json ~/.config/powerline/themes/tmux/default.json;
+
+if [[ $ERR_COUNT==0 ]]; then
+  echo "Configuration copied"
+else
+  echo "Configuration wasn't copied. Some troubles";
+  exit 1;
+fi
+
+echo "Reloading powerline"
 powerline-daemon --replace;

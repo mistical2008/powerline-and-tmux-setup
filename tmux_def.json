@@ -21,8 +21,7 @@
 				}
 			},
 			{
-				"function": "powerline.segments.common.net.internal_ip",
-				"priority": 50
+				"function": "powerline.segments.common.net.internal_ip"
 			},
 			{
 				"function": "powerline.segments.common.net.hostname"
