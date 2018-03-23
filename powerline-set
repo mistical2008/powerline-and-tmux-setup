@@ -1,0 +1,11 @@
+#!/bin/bash
+mkdir -p ~/.config/powerline/config_files;
+mkdir -p  ~/.config/powerline/config_files/themes/shell;
+mkdir -p  ~/.config/powerline/config_files/themes/tmux;
+
+cp config.json ~/.config/powerline/config_files/config.json;
+cp main.json ~/.config/powerline/config_files/themes/shell/__main__.json;
+cp my_leftonly.json ~/.config/powerline/config_files/themes/shell/my_leftonly.json;
+cp tmux_def.json ~/.config/powerline/config_files/themes/tmux/default.json;
+
+powerline-daemon --replace;
