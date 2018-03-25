@@ -32,5 +32,21 @@ else
   exit 1;
 fi
 
+
+cat <<EOF>> ~/.bashrc
+
+# This eanbles powerline for bash
+if [ -f `which powerline-daemon` ]; then
+  powerline-daemon -q
+  POWERLINE_BASH_CONTINUATION=1
+  POWERLINE_BASH_SELECT=1
+  . /usr/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
+fi
+
+EOF
+
+echo "Setting up tmux for powerline"
+powerline-config tmux setup;
+
 echo "Reloading powerline"
 powerline-daemon --replace;
