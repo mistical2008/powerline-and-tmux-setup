@@ -16,6 +16,9 @@ cat <<-'EOF' > ~/.config/powerline/config.json
 }
 EOF
 
+# Installs organizer
+sudo pip3 install organize-tool;
+
 # Installs pnpm
 curl -L https://unpkg.com/@pnpm/self-installer | node;
 
