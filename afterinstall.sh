@@ -18,6 +18,12 @@ EOF
 
 # Installs organizer
 sudo pip3 install organize-tool;
+# Copy organizer sevice and timer to systemd path
+sudo cp services/organizer.* /etc/systemd/system/
+# Start and enable organizer service
+sudo systemctl start organizer.service
+sudo systemctl enable organizer.service
+
 
 # Installs pnpm
 curl -L https://unpkg.com/@pnpm/self-installer | node;
@@ -30,6 +36,7 @@ Go to: https://github.com/jaspernbrouwer/powerline-gitstatus
 and setting up gitstatus theme
 EOF
 
+# Setting up tmux
 cat <<EOF> ~/.tmux.conf
 
 # Point out to powerline
@@ -61,8 +68,10 @@ run '~/.tmux/plugins/tpm/tpm'
 
 EOF
 
-./powerline-set
+# Setting up powerline theme
+./powerline-set.sh
 
+# Install of kcm-wacomtablet
 cat <<EOF
 ================ COPY LINES ABOVE ==================
 

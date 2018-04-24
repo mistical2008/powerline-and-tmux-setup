@@ -1,0 +1,11 @@
+[Unit]
+Description=Organizer service
+
+[Service]
+ExecStart=/usr/bin/organize run
+Restart=always
+User=evgeniy
+Group=evgeniy
+
+[Install]
+WantedBy=multi-user.target
