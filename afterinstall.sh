@@ -5,6 +5,11 @@ yes | sudo pacman -S snapper snapper-gui snap-pac wine winetricks playonlinux re
 # Installs packages from AUR
 yes | yaourt -S google-chrome skypeforlinux-stable-bin ttf-mac-fonts visual-studio-code-bin telegram-desktop-bin latte-dock-git gimp-gtk3-git libinput-gestures osx-el-capitan-theme-git gnome-osx-gtk-theme etcher psensor plasma5-applets-redshift-control-git enpass-bin debtap plasma5-applets-playbar2 plasma5-applets-active-window-control-git capitaine-cursors dropbox megasync-git dolphin-megasync-git drive xboxdrv squashfuse-git gimp-apng gimp-elsamuko-plugins gimp-fix-ca gimp-font-rendering-fix gimp-gap gimp-lensfun gimp-plugin-dcamnoise2 slack-desktop shfmt rclone-browser electrum-ltc pipemeter btrbk otf-droid-sans-mono-powerline-git marker xampp system-san-francisco-font-git pcloud-drive pcloudcc tusk android-sdk-platform-tools autokey-py3 && debtap -u;
 
+# Installing megasync
+wget https://mega.nz/linux/MEGAsync/Arch_Extra/x86_64/megasync-x86_64.pkg.tar.xz;
+sudo pacman -U megasync-x86_64.pkg.tar.xz;
+rm -rf megasync-x86_64.pkg.tar.xz;
+
 powerline-config tmux setup;
 mkdir -p ~/.config/powerline;
 
