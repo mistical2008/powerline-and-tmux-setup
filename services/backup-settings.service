@@ -1,0 +1,10 @@
+[Unit]
+Description=Backup settings folders from "etc" and "home"
+
+[Service]
+ExecStart=/mnt/Data/Scripts/backup-settings
+User=evgeniy
+Group=evgeniy
+
+[Install]
+WantedBy=multi-user.target
