@@ -1,4 +1,6 @@
 #!/bin/bash
+gpg --receive-keys D1483FA6C3C07136;
+
 # Installs pacman packages
 yes | sudo pacman -S --needed $(< pkg.pac.txt);
 

@@ -1,4 +1,6 @@
 #!/bin/bash
+gpg --receive-keys D1483FA6C3C07136
+
 yes | sudo pacman -S --needed $(< pkg.pac.txt);
 
 # Installs packages from AUR
