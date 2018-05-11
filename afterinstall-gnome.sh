@@ -1,9 +1,9 @@
 #!/bin/bash
 # Installs pacman packages
-yes | sudo pacman -S snapper snapper-gui snap-pac wine winetricks playonlinux redshift smartmontools nodejs-lts-carbon cherrytree krita-plugin-gmic xdotool wmctrl papirus-icon-theme hardinfo gnome-color-manager npm gparted virt-manager qemu vde2 ebtables dnsmasq bridge-utils openbsd-netcat xf86-input-wacom gericom/smplayer gericom/smplayer-skins unionfs-fuse gimp ncdu xbindkeys git hub ovmf xf86-input-mouse pinfo tree iftop iotop atop nmon powerline-fonts powerline pydf lib32-gnutls;
+yes | sudo pacman -S --needed $(< pkg.pac.txt);
 
 # Installs packages from AUR
-yes | yaourt -S google-chrome skypeforlinux-stable-bin ttf-mac-fonts visual-studio-code-bin telegram-desktop-bin gimp-gtk3-git libinput-gestures osx-el-capitan-theme-git gnome-osx-gtk-theme etcher psensor plasma5-applets-redshift-control-git enpass-bin debtap plasma5-applets-playbar2 plasma5-applets-active-window-control-git capitaine-cursors dropbox megasync-git drive xboxdrv squashfuse-git gimp-apng gimp-elsamuko-plugins gimp-fix-ca gimp-font-rendering-fix gimp-gap gimp-lensfun gimp-plugin-dcamnoise2 slack-desktop shfmt rclone-browser electrum-ltc pipemeter btrbk otf-droid-sans-mono-powerline-git marker xampp system-san-francisco-font-git pcloud-drive pcloudcc tusk android-sdk-platform-tools autokey-py3 && debtap -u;
+yes | yaourt -S --needed $(< pkg.aur.txt) && debtap -u;
 
 # Installing megasync
 #wget https://mega.nz/linux/MEGAsync/Arch_Extra/x86_64/megasync-x86_64.pkg.tar.xz;
@@ -66,30 +66,6 @@ run '~/.tmux/plugins/tpm/tpm'
 
 EOF
 
-# Adding custom repositories
-cat <<EOF>> /etc/pacman.conf
-========================================================
-# Custom repositories
-# Manjaro-strit
-[manjaro-strit]
-SigLevel = Optional
-Server = https://www.strits.dk/files/manjaro-strit/manjaro-strit-repo/$arch
-
-# Gericom
-[gericom]
-SigLevel = Never
-Server = http://download.tuxfamily.org/gericom/manjaro
-
-# Kibojoe
-#[kibojoe]
-#SigLevel = Never
-#Server = http://repo.kibojoe.org/
-
-EOF
-
-# Setting pacman HOOKs
-sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
-
 # Setting up powerline theme
 ./powerline-set.sh
 
@@ -101,8 +77,8 @@ COPY BASH FILES? (~/.bashrc and ~/.bash_aliases)
 TYPE Y(yes) or N(no)
 EOF
 
-read -p "Chosse your answer: " ANSWER
-if [[ $ANSWER -eq "Y" ]] || [[ $ANSWER -eq "Yes" ]] || [[ $ANSWER -eq "y" ]] || [[ $ANSWER -eq "yes" ]]; then
-	bash/.bashrc >> ~/.bashrc;
-	cp bash/bash_aliases ~/;
-fi
+#read -p "Chosse your answer: " ANSWER
+#if [[ $ANSWER == Y | $ANSWER == y | $ANSWER == yes| $ANSWER == Yes ]]; then
+#	.bashrc >> ~/.bashrc;
+#	cp bash_aliases ~/bash_aliales;
+#fi
