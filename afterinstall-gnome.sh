@@ -87,6 +87,9 @@ Server = http://download.tuxfamily.org/gericom/manjaro
 
 EOF
 
+# Setting pacman HOOKs
+sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
+
 # Setting up powerline theme
 ./powerline-set.sh
 
@@ -100,6 +103,6 @@ EOF
 
 read -p "Chosse your answer: " ANSWER
 if [[ $ANSWER -eq "Y" ]] || [[ $ANSWER -eq "Yes" ]] || [[ $ANSWER -eq "y" ]] || [[ $ANSWER -eq "yes" ]]; then
-	.bashrc >> ~/.bashrc;
-	cp bash_aliases ~/bash_aliales;
+	bash/.bashrc >> ~/.bashrc;
+	cp bash/bash_aliases ~/;
 fi

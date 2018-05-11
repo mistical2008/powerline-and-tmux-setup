@@ -69,6 +69,9 @@ EOF
 # Setting up powerline theme
 ./powerline-set.sh
 
+# Setting pacman HOOKs
+sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
+
 # Install of kcm-wacomtablet
 cat <<EOF
 ================ COPY LINES ABOVE ==================
@@ -134,6 +137,6 @@ EOF
 
 read -p "Chosse your answer: " ANSWER
 if [[ $ANSWER -eq "Y" ]] || [[ $ANSWER -eq "Yes" ]] || [[ $ANSWER -eq "y" ]] || [[ $ANSWER -eq "yes" ]]; then
-	.bashrc >> ~/.bashrc;
-	cp bash_aliases ~/bash_aliales;
+	bash/.bashrc >> ~/.bashrc;
+	cp bash/bash_aliases ~/;
 fi
