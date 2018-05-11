@@ -133,7 +133,7 @@ TYPE Y(yes) or N(no)
 EOF
 
 read -p "Chosse your answer: " ANSWER
-if [[ $ANSWER == Y | $ANSWER == y | $ANSWER == yes| $ANSWER == Yes ]]; then
+if [[ $ANSWER -eq "Y" ]] || [[ $ANSWER -eq "Yes" ]] || [[ $ANSWER -eq "y" ]] || [[ $ANSWER -eq "yes" ]]; then
 	.bashrc >> ~/.bashrc;
 	cp bash_aliases ~/bash_aliales;
 fi

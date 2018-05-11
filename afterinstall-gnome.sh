@@ -66,6 +66,27 @@ run '~/.tmux/plugins/tpm/tpm'
 
 EOF
 
+# Adding custom repositories
+cat <<EOF>> /etc/pacman.conf
+========================================================
+# Custom repositories
+# Manjaro-strit
+[manjaro-strit]
+SigLevel = Optional
+Server = https://www.strits.dk/files/manjaro-strit/manjaro-strit-repo/$arch
+
+# Gericom
+[gericom]
+SigLevel = Never
+Server = http://download.tuxfamily.org/gericom/manjaro
+
+# Kibojoe
+#[kibojoe]
+#SigLevel = Never
+#Server = http://repo.kibojoe.org/
+
+EOF
+
 # Setting up powerline theme
 ./powerline-set.sh
 
@@ -77,8 +98,8 @@ COPY BASH FILES? (~/.bashrc and ~/.bash_aliases)
 TYPE Y(yes) or N(no)
 EOF
 
-#read -p "Chosse your answer: " ANSWER
-#if [[ $ANSWER == Y | $ANSWER == y | $ANSWER == yes| $ANSWER == Yes ]]; then
-#	.bashrc >> ~/.bashrc;
-#	cp bash_aliases ~/bash_aliales;
-#fi
+read -p "Chosse your answer: " ANSWER
+if [[ $ANSWER -eq "Y" ]] || [[ $ANSWER -eq "Yes" ]] || [[ $ANSWER -eq "y" ]] || [[ $ANSWER -eq "yes" ]]; then
+	.bashrc >> ~/.bashrc;
+	cp bash_aliases ~/bash_aliales;
+fi
