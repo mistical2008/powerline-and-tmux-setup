@@ -1,10 +1,12 @@
 #!/bin/bash
+NC='\033[0m';
+BROWN='\033[0;33m';
 gpg --receive-keys D1483FA6C3C07136
 
-yes | sudo pacman -S --needed $(< pkg.pac.txt);
+yes | sudo pacman -S --needed - < pkg.pac.txt;
 
 # Installs packages from AUR
-yes | yaourt -S --needed $(< pkg.aur.txt) && debtap -u;
+cat pkg.aur.txt | xargs yaourt -S --needed --noconfirm && debtap -u;
 
 # Installing megasync
 #wget https://mega.nz/linux/MEGAsync/Arch_Extra/x86_64/megasync-x86_64.pkg.tar.xz;
@@ -27,9 +29,8 @@ sudo systemctl enable backup-settings.service
 # Installs pnpm
 curl -L https://unpkg.com/@pnpm/self-installer | node;
 
+printf "${BROWN}SET GITSTATUS FOR POWERLINE${NC}"
 cat <<EOF
-
-SET GITSTATUS FOR POWERLINE
 
 Go to: https://github.com/jaspernbrouwer/powerline-gitstatus
 and setting up gitstatus theme
@@ -75,7 +76,7 @@ sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
 
 # Install of kcm-wacomtablet
 cat <<EOF
-================ COPY LINES ABOVE ==================
+================ ${BROWN}COPY LINES ABOVE${NC} ==================
 
 # Maintainer: Lukas Jirkovsky <l.jirkovsky@gmail.com>
 pkgname=kcm-wacomtablet-frameworks-git
@@ -120,7 +121,7 @@ sleep 10
 
 cat <<EOF
 
-REPLACE PCKGBUILD CONTENT WITH COPIED LINES
+${BROWN}REPLACE PCKGBUILD CONTENT WITH COPIED LINES${NC}
 
 EOF
 
@@ -128,16 +129,13 @@ sleep 3
 
 yes | yaourt -S kcm-wacomtablet-git
 
-
 # Copy ~/.bashrc and ~/.bash_aliases
-cat<<EOF
 
-COPY BASH FILES? (~/.bashrc and ~/.bash_aliases)
-TYPE Y(yes) or N(no)
-EOF
+printf "${BROWN}COPY BASH FILES? (~/.bashrc and ~/.bash_aliases)${NC}"
+echo "TYPE Y(yes) or N(no)"
 
 read -p "Chosse your answer: " ANSWER
 if [[ $ANSWER -eq "Y" ]] || [[ $ANSWER -eq "Yes" ]] || [[ $ANSWER -eq "y" ]] || [[ $ANSWER -eq "yes" ]]; then
-	bash/.bashrc >> ~/.bashrc;
+	cat bash/.bashrc >> ~/.bashrc;
 	cp bash/bash_aliases ~/;
 fi
