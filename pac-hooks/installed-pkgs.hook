@@ -6,4 +6,4 @@ Target = *
 
 [Action]
 When = PostTransaction
-Exec = /bin/bash -c '/usr/bin/pacman -Qqe > /home/evgeniy/Документы/Dropbox/mj-packages.txt'
+Exec = /bin/bash -c '/usr/bin/pacman -Qm | /usr/bin/awk '{print $1}' > /home/evgeniy/Документы/Dropbox/pkg.aur.txt && /usr/bin/pacman -Qent | /usr/bin/awk '{print $1}' > /home/evgeniy/Документы/Dropbox/pkg.pac.txt '
