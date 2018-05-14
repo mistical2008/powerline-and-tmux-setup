@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Create dirs for mountpoints
+sudo mkdir /mnt/{btrfs,btrfs_home,Data,Downloads} /media;
+chown evgeniy.users  /mnt/{Data,Downloads} /media;
+
+# Mount btrfs
+sudo mount -t btrfs /dev/mapper/sda2 /mnt/btrfs;
+sudo mount -t btrfs /dev/mapper/sda3 /mnt/btrfs_home;
+
+# Install and configure snapper
+sudo pacman -S snapper;
+snapper -c root create-config /;
+snapper -c home create-config /home;
+
+btrfs subvolume delete /.snapshots;
+btrfs subvolume delete /home/.snapshots;
+btrfs subvolume create /mnt/{btrfs,btrfs_home}/@snapshots;
+
+mkdir /home/.snapshots;
+mkdir /.snapshots;
+chown evgeniy.users /home/.snapshots;
+chown evgeniy.users /.snapshots;
+
+systemctl start snapper-timeline.timer snapper-cleanup.timer;
+systemctl enable snapper-timeline.timer snapper-cleanup.timer;
+
+#========================================
+
+# Mount btrfs dirs
+echo " " >> ~/fstab;
+echo "# Btrfs mounts" >> ~/fstab;
+echo "UUID=$(lsblk -no UUID /dev/mapper/sda2) /mnt/btrfs          btrfs   rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> ~/fstab;
+echo "UUID=$(lsblk -no UUID /dev/mapper/sda2) /.snapshots         btrfs   subvol=@snapshots,rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> ~/fstab;
+echo "UUID=$(lsblk -no UUID /dev/mapper/sda3) /mnt/btrfs_home     btrfs   rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> ~/fstab;
+echo "UUID=$(lsblk -no UUID /dev/mapper/sda3) /home/.snapshots    btrfs   subvol=@snapshots,rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> ~/fstab;
+
+# Mount forlders
+echo " " >> ~/fstab;
+echo "# Call for Data" >> ~/fstab;
+echo "UUID=$(lsblk -no UUID /dev/sdb4) /mnt/Data          $(lsblk -no FSTYPE /dev/sdb4)    rw,auto,nosuid,dev,nofail                     0 0" >> ~/fstab;
+echo "UUID=$(lsblk -no UUID /dev/sdb4) /media             $(lsblk -no FSTYPE /dev/sdb4)    rw,auto,nosuid,dev,nofail                     0 0" >> ~/fstab;
+echo "UUID=$(lsblk -no UUID /dev/sdb3) /mnt/Downloads     $(lsblk -no FSTYPE /dev/sdb3)    rw,auto,nosuid,dev,nofail,noatime,logbufs=8     0 0" >> ~/fstab;
+echo " " >> ~/fstab;
+cat def-mounts >> ~/fstab
+
+#=========================================
+
+# Mount all from fstab
+mount -a;
+
+# Disable CoW for VM folder
+mkdir /home/evgeniy/VM;
+chown evgeniy.users  /home/evgeniy/VM;
+chattr +C /home/evgeniy/VM;

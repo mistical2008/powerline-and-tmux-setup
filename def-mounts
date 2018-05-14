@@ -1,0 +1,7 @@
+# Mount custom directories as home directories
+/media/Видео                          /home/evgeniy/Видео         none  bind       0 0
+/media/Документы                      /home/evgeniy/Документы     none  bind       0 0
+/media/Музыка                         /home/evgeniy/Музыка        none  bind       0 0
+/media/Изображения                    /home/evgeniy/Изображения   none  bind       0 0
+/mnt/Downloads                        /home/evgeniy/Загрузки      none  bind       0 0
+/media/Games                          /home/evgeniy/Игры          none  bind       0 0 

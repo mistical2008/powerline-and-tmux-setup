@@ -4,6 +4,41 @@ BROWN='\033[0;33m';
 
 gpg --receive-keys D1483FA6C3C07136;
 
+# Create dirs for mountpoints
+sudo mkdir /mnt/{btrfs,btrfs_home,Data,Downloads} /media;
+chown evgeniy.users  /mnt/{Data,Downloads} /media;
+
+# Mount btrfs
+sudo mount -t btrfs /dev/mapper/sda2 /mnt/btrfs;
+sudo mount -t btrfs /dev/mapper/sda3 /mnt/btrfs_home;
+
+# Install and configure snapper
+sudo pacman -S snapper;
+snapper -c root create-config /;
+snapper -c home create-config /home;
+
+btrfs subvolume delete /.snapshots;
+btrfs subvolume delete /home/.snapshots;
+btrfs subvolume create /mnt/{btrfs,btrfs_home}/@snapshots;
+
+mkdir /home/.snapshots;
+mkdir /.snapshots;
+chown evgeniy.users /home/.snapshots;
+chown evgeniy.users /.snapshots;
+
+systemctl start snapper-timeline.timer snapper-cleanup.timer;
+systemctl enable snapper-timeline.timer snapper-cleanup.timer;
+
+#==================================
+
+# Mount all from fstab
+mount -a;
+
+# Disable CoW for VM folder
+mkdir /home/evgeniy/VM;
+chown evgeniy.users  /home/evgeniy/VM;
+chattr +C /home/evgeniy/VM;
+
 # Installs pacman packages
 yes | sudo pacman -S --needed - < pkg.pac.txt;
 
@@ -17,6 +52,9 @@ cat pkg.aur.txt | xargs yaourt -S --needed --noconfirm && debtap -u;
 
 powerline-config tmux setup;
 mkdir -p ~/.config/powerline;
+
+# Setting up powerline theme
+./powerline-set.sh
 
 # Installs organizer
 sudo pip3 install organize-tool;
@@ -69,9 +107,6 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 run '~/.tmux/plugins/tpm/tpm'
 
 EOF
-
-# Setting up powerline theme
-./powerline-set.sh
 
 # Setting pacman HOOKs
 if [[ -d /etc/pacman.d/hooks ]]; then
