@@ -74,7 +74,12 @@ EOF
 ./powerline-set.sh
 
 # Setting pacman HOOKs
+if [[ -d /etc/pacman.d/hooks ]]; then
 sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
+else
+sudo mkdir /etc/pacman.d/hooks/;
+sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
+fi
 
 # Copy ~/.bashrc and ~/.bash_aliases
 
