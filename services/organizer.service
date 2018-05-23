@@ -4,8 +4,10 @@ Description=Organizer service
 [Service]
 ExecStart=/usr/bin/organize run
 Restart=always
+RestartSec=20
 User=evgeniy
 Group=evgeniy
 
 [Install]
 WantedBy=multi-user.target
+

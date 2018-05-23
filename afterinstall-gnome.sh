@@ -9,8 +9,8 @@ sudo mkdir /mnt/{btrfs,btrfs_home,Data,Downloads} /media;
 chown evgeniy.users  /mnt/{Data,Downloads} /media;
 
 # Mount btrfs
-sudo mount -t btrfs /dev/mapper/sda2 /mnt/btrfs;
-sudo mount -t btrfs /dev/mapper/sda3 /mnt/btrfs_home;
+sudo mount -t btrfs /dev/mapper/VG0-lvol_root /mnt/btrfs;
+sudo mount -t btrfs /dev/mapper/VG0-lvol_home /mnt/btrfs_home;
 
 # Install and configure snapper
 sudo pacman -S snapper;
@@ -19,7 +19,8 @@ snapper -c home create-config /home;
 
 btrfs subvolume delete /.snapshots;
 btrfs subvolume delete /home/.snapshots;
-btrfs subvolume create /mnt/{btrfs,btrfs_home}/@snapshots;
+btrfs subvolume create /mnt/btrfs/@snapshots;
+btrfs subvolume create /mnt/btrfs_home/@snapshots;
 
 mkdir /home/.snapshots;
 mkdir /.snapshots;
@@ -29,6 +30,25 @@ chown evgeniy.users /.snapshots;
 systemctl start snapper-timeline.timer snapper-cleanup.timer;
 systemctl enable snapper-timeline.timer snapper-cleanup.timer;
 
+#===================================
+
+# Mount btrfs dirs
+echo " " >> /etc/fstab;
+echo "# Btrfs mounts" >> /etc/fstab;
+echo "/dev/mapper/VG0-lvol_root /mnt/btrfs          btrfs   rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> /etc/fstab;
+echo "/dev/mapper/VG0-lvol_root /.snapshots         btrfs   subvol=@snapshots,rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> /etc/fstab;
+echo "/dev/mapper/VG0-lvol_home /mnt/btrfs_home     btrfs   rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> /etc/fstab;
+echo "/dev/mapper/VG0-lvol_home /home/.snapshots    btrfs   subvol=@snapshots,rw,noatime,space_cache,autodefrag,discard,compress=lzo  0 0" >> /etc/fstab;
+
+# Mount forlders
+echo " " >> /etc/fstab;
+echo "# Call for Data" >> /etc/fstab;
+echo "/dev/sdb4 /mnt/Data          $(lsblk -no FSTYPE /dev/sdb4)    rw,auto,nosuid,dev,nofail                     0 0" >> /etc/fstab;
+echo "/dev/sdb4 /media             $(lsblk -no FSTYPE /dev/sdb4)    rw,auto,nosuid,dev,nofail                     0 0" >> /etc/fstab;
+echo "/dev/sdb3 /mnt/Downloads     $(lsblk -no FSTYPE /dev/sdb3)    rw,auto,nosuid,dev,nofail,noatime,logbufs=8     0 0" >> /etc/fstab;
+echo " " >> /etc/fstab;
+#cat def-mounts >> /etc/fstab
+
 #==================================
 
 # Mount all from fstab
@@ -36,7 +56,7 @@ mount -a;
 
 # Disable CoW for VM folder
 mkdir /home/evgeniy/VM;
-chown evgeniy.users  /home/evgeniy/VM;
+chown evgeniy.users /home/evgeniy/VM;
 chattr +C /home/evgeniy/VM;
 
 # Installs pacman packages
@@ -50,11 +70,6 @@ cat pkg.aur.txt | xargs yaourt -S --needed --noconfirm && debtap -u;
 #sudo pacman -U megasync-x86_64.pkg.tar.xz;
 #rm -rf megasync-x86_64.pkg.tar.xz;
 
-powerline-config tmux setup;
-mkdir -p ~/.config/powerline;
-
-# Setting up powerline theme
-./powerline-set.sh
 
 # Installs organizer
 sudo pip3 install organize-tool;
@@ -77,7 +92,7 @@ and setting up gitstatus theme
 EOF
 
 # Setting up tmux
-cat <<EOF> ~/.tmux.conf
+cat <<EOF> /home/evgeniy/.tmux.conf
 
 # Point out to powerline
 source /usr/lib/python3.6/site-packages/powerline/bindings/tmux/powerline.conf
@@ -109,11 +124,11 @@ run '~/.tmux/plugins/tpm/tpm'
 EOF
 
 # Setting pacman HOOKs
-if [[ -d /etc/pacman.d/hooks ]]; then
-sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
+if [[ -d "/etc/pacman.d/hooks" ]]; then
+sudo cp ./pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
 else
 sudo mkdir /etc/pacman.d/hooks/;
-sudo cp pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
+sudo cp ./pac-hooks/installed-pkgs.hook /etc/pacman.d/hooks/;
 fi
 
 # Copy ~/.bashrc and ~/.bash_aliases
@@ -123,6 +138,6 @@ echo "TYPE Y(yes) or N(no)"
 
 read -p "Chosse your answer: " ANSWER
 if [[ $ANSWER -eq "Y" ]] || [[ $ANSWER -eq "Yes" ]] || [[ $ANSWER -eq "y" ]] || [[ $ANSWER -eq "yes" ]]; then
-	cat bash/.bashrc >> ~/.bashrc;
-	cp bash/bash_aliases ~/;
+	cat ./bash/.bashrc >> /home/evgeniy/.bashrc;
+	cp ./bash/.bash_aliases /home/evgeniy/;
 fi
