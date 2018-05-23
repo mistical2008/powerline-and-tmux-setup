@@ -33,3 +33,5 @@ alias fix.icons="sudo sed -i 's/Context=Mimetypes/Context=MimeTypes/g; s/Context
 alias  genpass="cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 32 | head -n 1"
 alias gfix="gita . && gitcm 'some fixes' && git push"
 alias manjaro-pool-pkg="https://mirror.netzspielplatz.de/manjaro/packages/pool/overlay/"
+alias fix.def.files="xdg-mime default org.gnome.Nautilus.desktop inode/directory"
+alias show.def.files="xdg-mime query default inode/directory"
