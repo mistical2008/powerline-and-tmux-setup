@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 NC='\033[0m';
 BROWN='\033[0;33m';
 gpg --receive-keys D1483FA6C3C07136

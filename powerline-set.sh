@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 if [[ -d ~/.config/powerline ]]; then
   echo "Powerline directori exist. Removing...";
   rm -rf ~/.config/powerline;

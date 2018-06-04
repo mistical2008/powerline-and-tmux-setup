@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 NC='\033[0m';
 BROWN='\033[0;33m';
 
@@ -6,7 +6,7 @@ gpg --receive-keys D1483FA6C3C07136;
 
 # Create dirs for mountpoints
 sudo mkdir /mnt/{btrfs,btrfs_home,Data,Downloads} /media;
-chown evgeniy.users  /mnt/{Data,Downloads} /media;
+chown $(whoami).users  /mnt/{Data,Downloads} /media;
 
 # Mount btrfs
 sudo mount -t btrfs /dev/mapper/VG0-lvol_root /mnt/btrfs;
@@ -24,8 +24,8 @@ btrfs subvolume create /mnt/btrfs_home/@snapshots;
 
 mkdir /home/.snapshots;
 mkdir /.snapshots;
-chown evgeniy.users /home/.snapshots;
-chown evgeniy.users /.snapshots;
+chown $(whoami).users /home/.snapshots;
+chown $(whoami).users /.snapshots;
 
 systemctl start snapper-timeline.timer snapper-cleanup.timer;
 systemctl enable snapper-timeline.timer snapper-cleanup.timer;
