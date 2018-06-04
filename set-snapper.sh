@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # На установленной системе поставь snapper и фронт к нему:
-sudo pacman -S snapper-gui
+sudo pacman -S snapper-gui snap-pac;
 
 # Монтируем root и home. Так будут доступны для просмотра @ и @home по пути /mnt/@ и /mnt/@home
 # Не забудь сменить VG0-lvol_root VG0-lvol_home на свои имена
-sudo mkdir /mnt/{btrfs,btrfs_home} #создаем точки монтирования для @ и @home
-sudo mount -t btrfs /dev/mapper/VG0-lvol_root /mnt/btrfs # Проверь пути VG0-lvol_root
-sudo mount -t btrfs /dev/mapper/VG0-lvol_home /mnt/btrfs_home # Проверь пути VG0-lvol_home
+sudo mkdir /mnt/{btrfs,btrfs_home}; #создаем точки монтирования для @ и @home
+sudo mount -t btrfs /dev/mapper/VG0-lvol_root /mnt/btrfs; # Проверь пути VG0-lvol_root
+sudo mount -t btrfs /dev/mapper/VG0-lvol_home /mnt/btrfs_home; # Проверь пути VG0-lvol_home
 
 # Затем создай конфиги для root и home:
-sudo snapper -c root create config /
-sudo snapper -c home create config /home
+sudo snapper -c root create config /;
+sudo snapper -c home create config /home;
 
 # Snapper создает сабволюмы не лучшим образом, исправим это. Удалим те, что есть и создадим свои
 btrfs subvolume delete /.snapshots;
